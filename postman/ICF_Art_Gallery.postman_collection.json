@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "7ffe92f6-7cbc-4540-9d8c-b1a0d724ac3c",
+		"name": "Art_Gallery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19709044"
+	},
+	"item": [
+		{
+			"name": "1. Check current user's data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/users/me",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Sign in with one of the existing users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/users/signin?username={{sample-user-1}}&password={{sample-pass}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"users",
+						"signin"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{sample-user-1}}"
+						},
+						{
+							"key": "password",
+							"value": "{{sample-pass}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Authenticate user with the requested token as a header parameter and check its data again, and if the authentication was successful, you can use the endpoints of the gallery",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBlbWFpbC5jb20iLCJhdXRoIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJpYXQiOjE2NzQzMzU0NjQsImV4cCI6MTY3NDMzOTA2NH0.zgaVgR7IEkt2SmTiOtu7PK81DR_K6vkM26kpElbpVFE",
+						"type": "text"
+					}
+				]
+			},
+			"response": []
+		},
+		{
+			"name": "A. Retrieve artwork",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "B. Retrieve paginated artworks",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "C. Purchase artwork (only for clients!)",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "D. List owned artworks by user (only for admins!)",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

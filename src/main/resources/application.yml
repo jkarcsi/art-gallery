@@ -1,0 +1,13 @@
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expire-length: 300000 # 5 minutes duration for locally testing purposes: 5 minutes * 60 seconds * 1000 miliseconds
+
+org:
+  apache:
+    tomcat:
+      level: INFO
+      util:
+        net:
+          level: WARNING
