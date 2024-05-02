@@ -44,17 +44,14 @@ public class GalleryService {
     }
 
     public Page<Artwork> findPaginatedArtworks(@PageableDefault(page = 1, value = 10000) final Pageable pageable) {
-
         final ArtworkPage resultPage =
                 artworkDownloaderService.getArtworksPaginated(pageable.getPageNumber(), pageable.getPageSize());
         final Page<Artwork> response =
                 new PageImpl<>(resultPage.getArtworks(), PageRequest.of(resultPage.getPage(), resultPage.getPageSize()),
                         resultPage.getTotalRecords());
-
         if (pageable.getPageNumber() > response.getTotalPages()) {
             throw new CustomGalleryException(NOT_FOUND, PAGES_EXCEEDED);
         }
-
         return response;
     }
 

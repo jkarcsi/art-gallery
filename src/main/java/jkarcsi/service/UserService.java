@@ -17,6 +17,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,7 +28,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public String signin(String username, String password) {
+    public String signIn(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
@@ -35,7 +37,7 @@ public class UserService {
         }
     }
 
-    public String signup(AppUser appUser) {
+    public String signUp(AppUser appUser) {
         if (!userRepository.existsByUsername(appUser.getUsername())) {
             appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
             userRepository.save(appUser);
@@ -53,7 +55,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public AppUser whoami(HttpServletRequest req) {
+    public AppUser whoAmI(HttpServletRequest req) {
         return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
     }
 
@@ -61,4 +63,7 @@ public class UserService {
         return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
     }
 
+    public List<AppUser> listingUsers() {
+        return userRepository.findAll();
+    }
 }

@@ -15,10 +15,13 @@ public class ExternalRequestParams {
     public static final List<String> ARTIC_PARAMS = List.of(IMAGE_ID, TITLE, AUTHOR, THUMBNAIL);
 
     //ArtworkPage
-    public static final String ARTWORKS = "data";
-    public static final String TOTAL_RECORDS = "total";
-    public static final String PAGE_SIZE = "limit";
-    public static final String PAGE = "current_page";
+    public static final String DATA = "data";
+    public static final String PAGE = "page";
+    public static final String TOTAL = "total";
+    public static final String LIMIT = "limit";
+    public static final String PAGINATION = "pagination";
+    public static final String CURRENT_PAGE = "current_page";
+    public static final String FIELDS = "fields";
 
     // Thumbnail
     public static final String LQIP = "lqip";

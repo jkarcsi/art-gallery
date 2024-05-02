@@ -9,6 +9,7 @@ public class UserMessages {
     public static final String SIGN_IN = "Authenticates user and returns its JWT token";
     public static final String SIGN_UP = "Creates user and returns its JWT token";
     public static final String ME = "Returns current user's data";
+    public static final String ALL = "Returns all user's data";
     public static final String DELETE = "Deletes specific user by username";
 
     // Errors

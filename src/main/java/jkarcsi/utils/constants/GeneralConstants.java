@@ -1,25 +1,32 @@
 package jkarcsi.utils.constants;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Value;
 
 @UtilityClass
 public class GeneralConstants {
 
-    // Requests
-    public static final String ARTIC_API_HOST = "https://api.artic.edu/api/v1/artworks";
-    public static final String USERS_BASE_PATH = "/users";
-    public static final String GALLERY_BASE_PATH = "/artworks";
-    public static final String ID_PATH = "/{id}";
-    public static final String SIGNIN_PATH = "/signin";
-    public static final String SIGNUP_PATH = "/signup";
-    public static final String USERNAME_PATH = "/{username}";
-    public static final String ME_PATH = "/me";
-    public static final String REFRESH_PATH = "/refresh";
+    // Host
+    @Value("${paths.host}")
+    public String host;
 
-    // Authorization
-    public static final String ACCESS_BOTH = "hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')";
-    public static final String ACCESS_CLIENT = "hasRole('ROLE_CLIENT')";
-    public static final String ACCESS_ADMIN = "hasRole('ROLE_ADMIN')";
+    // Paths
+    // Users
+    public static final String USERS_BASE = "${paths.users.base}";
+    public static final String USERS_POST_SIGNIN = "${paths.users.post.login}";
+    public static final String USERS_POST_SIGNUP = "${paths.users.post.register}";
+    public static final String USERS_DELETE_REMOVE = "${paths.users.delete.remove}";
+    public static final String USERS_GET_OWNERSHIP = "${paths.users.get.ownership}";
+    public static final String USERS_GET_SELF = "${paths.users.get.self}";
+    public static final String USERS_GET_ALL_USERS = "${paths.users.get.users}";
+    public static final String USERS_GET_REFRESH = "${paths.users.get.refresh}";
+
+    // Paths
+    // Gallery
+    public static final String GALLERY_BASE = "${paths.gallery.base}";
+    public static final String GALLERY_GET_SINGLE = "${paths.gallery.get.single}";
+    public static final String GALLERY_POST_PURCHASE = "${paths.gallery.post.purchase}";
+
 
     // Swagger
     public static final String AUTHORIZATION = "Authorization";

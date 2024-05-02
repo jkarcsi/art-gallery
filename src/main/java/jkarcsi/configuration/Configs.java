@@ -1,7 +1,6 @@
 package jkarcsi.configuration;
 
 import static jkarcsi.configuration.logging.LoggingConfig.logWebclientRequest;
-import static jkarcsi.utils.constants.GeneralConstants.ARTIC_API_HOST;
 
 import javax.net.ssl.SSLException;
 
@@ -16,6 +15,7 @@ import io.netty.resolver.DefaultAddressResolverGroup;
 import jkarcsi.dto.gallery.Artwork;
 import jkarcsi.dto.gallery.ArtworkPage;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +25,9 @@ import reactor.netty.http.client.HttpClient;
 
 @Configuration
 public class Configs {
+
+    @Value("${paths.host}")
+    private String host;
 
     @Bean
     @Primary
@@ -53,11 +56,14 @@ public class Configs {
     public WebClient webClient(final WebClient.Builder webClientBuilder) throws SSLException {
         final SslContext sslContext =
                 SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
-        return webClientBuilder.baseUrl(ARTIC_API_HOST).filters(exchangeFilterFunctions -> {
-            exchangeFilterFunctions.add(logWebclientRequest());
-        }).clientConnector(new ReactorClientHttpConnector(
-                HttpClient.create().followRedirect(true).secure(t -> t.sslContext(sslContext))
-                        .resolver(DefaultAddressResolverGroup.INSTANCE))).build();
+        final HttpClient client = HttpClient.create().followRedirect(true).secure(t -> t.sslContext(sslContext))
+                .resolver(DefaultAddressResolverGroup.INSTANCE);
+        return webClientBuilder
+                .baseUrl(host)
+                .filters(exchangeFilterFunctions -> exchangeFilterFunctions.add(logWebclientRequest()))
+                .clientConnector(new ReactorClientHttpConnector(
+                        client))
+                .build();
     }
 
 }

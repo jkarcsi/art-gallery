@@ -2,12 +2,43 @@ security:
   jwt:
     token:
       secret-key: secret-key
-      expire-length: 300000 # 5 minutes duration for locally testing purposes: 5 minutes * 60 seconds * 1000 miliseconds
+      expire-length: 300000 # 5 minutes duration for locally testing purposes: 5 minutes * 60 seconds * 1000 miliseconds = 300000 milliseconds
 
-org:
-  apache:
-    tomcat:
-      level: INFO
-      util:
-        net:
-          level: WARNING
+logging:
+  level:
+    org:
+      apache:
+        tomcat:
+          util: info
+          net: info
+
+paths:
+  host: https://api.artic.edu/api/v1/artworks
+  users:
+    base: /users
+    post:
+      login: /signin
+      register: /signup
+    delete:
+      remove: /{username}
+    get:
+      ownership: /{username}
+      self: /me
+      users: /us
+      refresh: /refresh
+  gallery:
+    base: /artworks
+    get:
+      single: /{id}
+    post:
+      purchase: /{id}
+
+messages:
+  retrieve: Retrieve a single artwork by its ID
+  paginated: Retrieve paginated artworks with an option to set the page number and page size
+  buy: Buying an artwork
+  list: Listing all artworks owned by a user
+  notFound: The provided id does not match any of the artworks
+  forbidden: The specified URL cannot be found or there are no rights to reach it
+  exceeded: The specified page number (with this limit) cannot be found
+  sold: This artwork is not available for sale

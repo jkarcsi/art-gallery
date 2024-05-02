@@ -2,6 +2,9 @@ package jkarcsi.service;
 
 import static java.util.Objects.requireNonNull;
 import static jkarcsi.utils.constants.ExternalRequestParams.ARTIC_PARAMS;
+import static jkarcsi.utils.constants.ExternalRequestParams.FIELDS;
+import static jkarcsi.utils.constants.ExternalRequestParams.LIMIT;
+import static jkarcsi.utils.constants.ExternalRequestParams.PAGE;
 import static jkarcsi.utils.constants.GalleryMessages.ARTWORK_NOT_FOUND;
 import static jkarcsi.utils.constants.GalleryMessages.WEBCLIENT_FORBIDDEN;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -24,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class ArtworkDownloaderService {
 
     @Autowired
@@ -72,9 +75,9 @@ public class ArtworkDownloaderService {
     public ResponseEntity<String> getPaginatedArtworkResponse(final Integer page, final Integer limit) {
         final ResponseEntity<String> response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .queryParam("page", "{page}")
-                        .queryParam("limit", "{limit}")
-                        .queryParam("fields", StringUtils.join(ARTIC_PARAMS, ","))
+                        .queryParam(PAGE, "{page}")
+                        .queryParam(LIMIT, "{limit}")
+                        .queryParam(FIELDS, StringUtils.join(ARTIC_PARAMS, ","))
                         .build(page, limit)
                 )
                 .retrieve()

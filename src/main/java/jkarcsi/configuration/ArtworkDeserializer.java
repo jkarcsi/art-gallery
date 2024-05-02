@@ -2,6 +2,7 @@ package jkarcsi.configuration;
 
 import static jkarcsi.utils.constants.ExternalRequestParams.ALT_TEXT;
 import static jkarcsi.utils.constants.ExternalRequestParams.AUTHOR;
+import static jkarcsi.utils.constants.ExternalRequestParams.DATA;
 import static jkarcsi.utils.constants.ExternalRequestParams.HEIGHT;
 import static jkarcsi.utils.constants.ExternalRequestParams.IMAGE_ID;
 import static jkarcsi.utils.constants.ExternalRequestParams.LQIP;
@@ -20,8 +21,6 @@ import jkarcsi.dto.gallery.Thumbnail;
 
 public class ArtworkDeserializer extends StdDeserializer<Artwork> {
 
-    public static final String DATA = "data";
-
     public ArtworkDeserializer() {
         this(null);
     }
@@ -32,18 +31,22 @@ public class ArtworkDeserializer extends StdDeserializer<Artwork> {
 
     @Override
     public Artwork deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        JsonNode tree = jp.getCodec().readTree(jp);
+        JsonNode jsonNode = tree.get(DATA);
+        return deserializeArtworkProperties(jsonNode);
+    }
 
-        JsonNode productNode = jp.getCodec().readTree(jp);
+    protected static Artwork deserializeArtworkProperties(JsonNode jsonNode) {
         final Artwork artwork = new Artwork();
-
-        artwork.setId(productNode.get(DATA).get(IMAGE_ID).intValue());
-        artwork.setTitle(productNode.get(DATA).get(TITLE).textValue());
-        artwork.setAuthor(productNode.get(DATA).get(AUTHOR).textValue());
-        artwork.setThumbnail(new Thumbnail(productNode.get(DATA).get(THUMBNAIL).get(LQIP).asText(),
-                productNode.get(DATA).get(THUMBNAIL).get(WIDTH).asInt(),
-                productNode.get(DATA).get(THUMBNAIL).get(HEIGHT).asInt(),
-                productNode.get(DATA).get(THUMBNAIL).get(ALT_TEXT).asText()));
-
+        artwork.setId(jsonNode.get(IMAGE_ID).intValue());
+        artwork.setTitle(jsonNode.get(TITLE).textValue());
+        artwork.setAuthor(jsonNode.get(AUTHOR).textValue());
+        if (!jsonNode.get(THUMBNAIL).isNull()) {
+            artwork.setThumbnail(new Thumbnail(jsonNode.get(THUMBNAIL).get(LQIP).asText(),
+                    jsonNode.get(THUMBNAIL).get(WIDTH).asInt(),
+                    jsonNode.get(THUMBNAIL).get(HEIGHT).asInt(),
+                    jsonNode.get(THUMBNAIL).get(ALT_TEXT).asText()));
+        }
         return artwork;
     }
 

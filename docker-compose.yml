@@ -1,4 +1,4 @@
-version: "1.0"
+version: "3.0"
 
 services:
   mysqldb:
@@ -12,6 +12,9 @@ services:
       - ${MYSQLDB_LOCAL_PORT}:${MYSQLDB_DOCKER_PORT}
     volumes:
       - db:/var/lib/mysql
+    networks:
+      - backend
+
   app:
     depends_on:
       - mysqldb
@@ -26,6 +29,12 @@ services:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
+    networks:
+      - backend
 
 volumes:
   db:
+
+networks:
+  backend:
+    driver: bridge

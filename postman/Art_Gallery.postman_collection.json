@@ -1,16 +1,22 @@
 {
 	"info": {
-		"_postman_id": "7ffe92f6-7cbc-4540-9d8c-b1a0d724ac3c",
+		"_postman_id": "d99b1a89-fd8a-4fa2-921f-941699d936af",
 		"name": "Art_Gallery",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "19709044"
+		"_exporter_id": "29926177"
 	},
 	"item": [
 		{
 			"name": "1. Check current user's data",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}{{requestToken}}",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{base-url}}/users/me",
 					"host": [
@@ -25,12 +31,55 @@
 			"response": []
 		},
 		{
-			"name": "2. Sign in with one of the existing users",
+			"name": "2. Check all user's data (only for admins!)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}{{requestToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base-url}}/users/us",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"users",
+						"us"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Sign in with one of the existing users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Requesting token is successful\",  ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response has required format\", function () {\r",
+							"    pm.expect(pm.response.text()).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"Save the new token to collection\", function () {\r",
+							"    pm.collectionVariables.set('requestToken', pm.response.text());\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{base-url}}/users/signin?username={{sample-user-1}}&password={{sample-pass}}",
+					"raw": "{{base-url}}/users/signin?username={{sample-admin-user}}&password={{sample-password}}",
 					"host": [
 						"{{base-url}}"
 					],
@@ -41,11 +90,11 @@
 					"query": [
 						{
 							"key": "username",
-							"value": "{{sample-user-1}}"
+							"value": "{{sample-admin-user}}"
 						},
 						{
 							"key": "password",
-							"value": "{{sample-pass}}"
+							"value": "{{sample-password}}"
 						}
 					]
 				}
@@ -53,40 +102,83 @@
 			"response": []
 		},
 		{
-			"name": "3. Authenticate user with the requested token as a header parameter and check its data again, and if the authentication was successful, you can use the endpoints of the gallery",
+			"name": "A. Retrieve paginated artworks",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token-prefix}}eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMUBlbWFpbC5jb20iLCJhdXRoIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJpYXQiOjE2NzQzMzU0NjQsImV4cCI6MTY3NDMzOTA2NH0.zgaVgR7IEkt2SmTiOtu7PK81DR_K6vkM26kpElbpVFE",
+						"value": "{{token-prefix}}{{requestToken}}",
 						"type": "text"
 					}
-				]
+				],
+				"url": {
+					"raw": "{{base-url}}/artworks?page={{default-page}}&limit={{default-limit}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"artworks"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "{{default-page}}"
+						},
+						{
+							"key": "limit",
+							"value": "{{default-limit}}"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "A. Retrieve artwork",
+			"name": "B. Retrieve artwork",
 			"request": {
 				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "B. Retrieve paginated artworks",
-			"request": {
-				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}{{requestToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base-url}}/artworks/{{sample-artwork-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"artworks",
+						"{{sample-artwork-id}}"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "C. Purchase artwork (only for clients!)",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}{{requestToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base-url}}/artworks/{{sample-artwork-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"artworks",
+						"{{sample-artwork-id}}"
+					]
+				}
 			},
 			"response": []
 		},
@@ -94,9 +186,52 @@
 			"name": "D. List owned artworks by user (only for admins!)",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token-prefix}}{{requestToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base-url}}/users/{{sample-client-user}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"users",
+						"{{sample-client-user}}"
+					]
+				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "requestToken",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

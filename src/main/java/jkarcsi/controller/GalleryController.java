@@ -6,10 +6,9 @@ import static jkarcsi.utils.constants.GalleryMessages.PAGES_EXCEEDED;
 import static jkarcsi.utils.constants.GalleryMessages.PAGINATED;
 import static jkarcsi.utils.constants.GalleryMessages.RETRIEVE;
 import static jkarcsi.utils.constants.GalleryMessages.WEBCLIENT_FORBIDDEN;
-import static jkarcsi.utils.constants.GeneralConstants.ACCESS_BOTH;
-import static jkarcsi.utils.constants.GeneralConstants.ACCESS_CLIENT;
-import static jkarcsi.utils.constants.GeneralConstants.GALLERY_BASE_PATH;
-import static jkarcsi.utils.constants.GeneralConstants.ID_PATH;
+import static jkarcsi.utils.constants.GeneralConstants.GALLERY_BASE;
+import static jkarcsi.utils.constants.GeneralConstants.GALLERY_GET_SINGLE;
+import static jkarcsi.utils.constants.GeneralConstants.GALLERY_POST_PURCHASE;
 import static jkarcsi.utils.constants.UserMessages.ACCESS_DENIED;
 import static jkarcsi.utils.constants.UserMessages.NOT_EXIST;
 import static jkarcsi.utils.constants.UserMessages.TOKEN_ERROR;
@@ -19,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import jkarcsi.utils.constants.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import jkarcsi.dto.gallery.Artwork;
 import jkarcsi.service.GalleryService;
@@ -38,18 +38,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(GALLERY_BASE_PATH)
+@RequestMapping(GALLERY_BASE)
 @Api(tags = "gallery")
 @RequiredArgsConstructor
 @IncludeSwaggerDocumentation
 @Validated
 public class GalleryController {
 
-
     private final GalleryService galleryService;
 
-    @GetMapping(ID_PATH)
-    @PreAuthorize(ACCESS_BOTH)
+    @GetMapping(GALLERY_GET_SINGLE)
+    @PreAuthorize(AccessLevel.COMMON)
     @ApiOperation(value = RETRIEVE)
     @ApiResponses(value = { @ApiResponse(code = 400, message = ARTWORK_NOT_FOUND),
             @ApiResponse(code = 403, message = ACCESS_DENIED), @ApiResponse(code = 500, message = TOKEN_ERROR) })
@@ -58,7 +57,7 @@ public class GalleryController {
     }
 
     @GetMapping(params = { "page", "limit" })
-    @PreAuthorize(ACCESS_BOTH)
+    @PreAuthorize(AccessLevel.COMMON)
     @ApiOperation(value = PAGINATED)
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = PAGES_EXCEEDED), @ApiResponse(code = 403, message = WEBCLIENT_FORBIDDEN),
@@ -73,8 +72,8 @@ public class GalleryController {
         return ResponseEntity.ok().headers(resultHeader).body(resultPage);
     }
 
-    @PostMapping(ID_PATH)
-    @PreAuthorize(ACCESS_CLIENT)
+    @PostMapping(GALLERY_POST_PURCHASE)
+    @PreAuthorize(AccessLevel.CLIENT)
     @ApiOperation(value = BUY)
     @ApiResponses(
             value = { @ApiResponse(code = 400, message = USER_ERROR), @ApiResponse(code = 403, message = ACCESS_DENIED),

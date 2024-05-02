@@ -5,19 +5,20 @@ import static jkarcsi.utils.constants.GeneralConstants.REPLACEMENT;
 import static jkarcsi.utils.constants.GeneralConstants.WEBCLIENT_FAIL;
 import static jkarcsi.utils.constants.GeneralConstants.WEBCLIENT_SUCCESS;
 import static jkarcsi.utils.helpers.SampleData.SAMPLE_USERS_PASSWORD;
-import static org.zalando.logbook.HeaderFilters.replaceHeaders;
-import static org.zalando.logbook.QueryFilters.replaceQuery;
+import static org.zalando.logbook.core.QueryFilters.replaceQuery;
+import static org.zalando.logbook.core.HeaderFilters.replaceHeaders;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.zalando.logbook.Conditions;
-import org.zalando.logbook.DefaultSink;
+import org.zalando.logbook.core.Conditions;
+import org.zalando.logbook.core.DefaultSink;
 import org.zalando.logbook.HttpRequest;
 import org.zalando.logbook.HttpResponse;
 import org.zalando.logbook.Logbook;
@@ -34,7 +35,7 @@ public class LoggingConfig {
                 .headerFilter(replaceHeaders(AUTHORIZATION::equalsIgnoreCase, REPLACEMENT))
                 .queryFilter(replaceQuery(SAMPLE_USERS_PASSWORD, REPLACEMENT)).strategy(new Strategy() {
                     @Override
-                    public HttpResponse process(final HttpRequest request, final HttpResponse response) {
+                    public HttpResponse process(final @NotNull HttpRequest request, final @NotNull HttpResponse response) {
                         try {
                             return response.withBody();
                         } catch (IOException e) {

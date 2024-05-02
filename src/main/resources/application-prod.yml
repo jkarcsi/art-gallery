@@ -11,13 +11,13 @@ spring:
     url: jdbc:mysql://mysqldb:${MYSQLDB_DOCKER_PORT}/${MYSQLDB_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
     username: ${MYSQLDB_USER}
     password: ${MYSQLDB_ROOT_PASSWORD}
-    testWhileIdle: true
-  tomcat:
-    max-wait: 20000
-    max-active: 50
-    max-idle: 20
-    min-idle: 15
+    tomcat:
+      test-while-idle: true
+      max-wait: 20000
+      max-active: 50
+      max-idle: 20
+      min-idle: 15
 security:
   jwt:
     token:
-      expire-length: 1800000 # 30 minutes duration: 30 minutes * 60 seconds * 1000 miliseconds
+      expire-length: 1800000 # 30 minutes duration: 30 minutes * 60 seconds * 1000 milliseconds = 1800000 milliseconds

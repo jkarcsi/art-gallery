@@ -25,7 +25,8 @@ public class PasswordConstraintsValidator implements ConstraintValidator<Passwor
                 Arrays.asList(new LengthRule(10, 128), new CharacterRule(EnglishCharacterData.UpperCase, 1),
                         new CharacterRule(EnglishCharacterData.LowerCase, 1),
                         new CharacterRule(EnglishCharacterData.Digit, 1),
-                        new CharacterRule(EnglishCharacterData.Special, 1), new WhitespaceRule(),
+                        new CharacterRule(EnglishCharacterData.Special, 1),
+                        new WhitespaceRule(),
                         new RepeatCharacterRegexRule(3),
                         new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false),
                         new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false)));

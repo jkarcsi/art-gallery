@@ -25,7 +25,7 @@ public class ArtGalleryApp {
     }
 
     @Bean
-    public ApplicationRunner run(final UserService userService, final UserRepository userRepository) throws Exception {
+    public ApplicationRunner run(final UserService userService, final UserRepository userRepository) {
         return (ApplicationArguments args) -> {
             if (!(userRepository.existsByUsername(SAMPLE_USER_ONE) && userRepository.existsByUsername(
                     SAMPLE_USER_TWO))) {
@@ -33,8 +33,8 @@ public class ArtGalleryApp {
                         .setAppUserRoles(new ArrayList<>(Collections.singletonList(AppUserRole.ROLE_ADMIN)));
                 AppUser client = new AppUser().setUsername(SAMPLE_USER_TWO).setPassword(SAMPLE_USERS_PASSWORD)
                         .setAppUserRoles(new ArrayList<>(Collections.singletonList(AppUserRole.ROLE_CLIENT)));
-                userService.signup(admin);
-                userService.signup(client);
+                userService.signUp(admin);
+                userService.signUp(client);
             }
         };
 

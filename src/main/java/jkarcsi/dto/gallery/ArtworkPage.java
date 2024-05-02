@@ -1,9 +1,9 @@
 package jkarcsi.dto.gallery;
 
-import static jkarcsi.utils.constants.ExternalRequestParams.ARTWORKS;
-import static jkarcsi.utils.constants.ExternalRequestParams.PAGE;
-import static jkarcsi.utils.constants.ExternalRequestParams.PAGE_SIZE;
-import static jkarcsi.utils.constants.ExternalRequestParams.TOTAL_RECORDS;
+import static jkarcsi.utils.constants.ExternalRequestParams.CURRENT_PAGE;
+import static jkarcsi.utils.constants.ExternalRequestParams.DATA;
+import static jkarcsi.utils.constants.ExternalRequestParams.LIMIT;
+import static jkarcsi.utils.constants.ExternalRequestParams.TOTAL;
 
 import java.util.List;
 
@@ -21,12 +21,12 @@ import jkarcsi.configuration.ArtworkPageDeserializer;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = ArtworkPageDeserializer.class)
 public class ArtworkPage {
-    @JsonProperty(ARTWORKS)
+    @JsonProperty(DATA)
     private List<Artwork> artworks;
-    @JsonProperty(TOTAL_RECORDS)
+    @JsonProperty(TOTAL)
     private Long totalRecords;
-    @JsonProperty(PAGE_SIZE)
+    @JsonProperty(LIMIT)
     private Integer pageSize;
-    @JsonProperty(PAGE)
+    @JsonProperty(CURRENT_PAGE)
     private Integer page;
 }

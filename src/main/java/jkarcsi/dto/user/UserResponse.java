@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class UserResponse {
 
-  @ApiModelProperty(position = 0)
+  @ApiModelProperty
   private Integer id;
   @ApiModelProperty(position = 1)
   private String username;
